@@ -1,0 +1,42 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.places-table {
+    border: 10px black double;
+    margin-bottom: 20px;
+}
+
+    .places-table > tbody > tr > td {
+        width: 100px;
+        height: 60px;
+        font-size: 17px;
+        text-align: center;
+    }
+
+.taken {
+    background-color: red;
+}
+
+.nontaken {
+    background-color: lightgreen;
+}
+
+.places-table > tr > td > a:link, .places-table > tr > td > a:visited {
+    color: black;
+}

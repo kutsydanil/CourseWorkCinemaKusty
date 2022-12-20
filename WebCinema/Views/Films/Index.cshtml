@@ -1,0 +1,122 @@
+﻿@model FilmsViewModel
+
+@{
+    ViewData["Title"] = "Фильмы";
+    string OldFieldName = Model.SortViewModel.FieldName;
+    string Name = Model.Name;
+    string Description = Model.Description;
+    int? AgeLimit = Model.AgeLimit;
+    int? Duration = Model.Duration;
+    int GenreId = Model.GenreId;
+    int CompanyId = Model.FilmProductionId;
+    int CountryId = Model.CountryProductionId;
+    SortState SortOrder = Model.SortViewModel.CurrentState;
+}
+
+<h1>Фильмы</h1>
+
+<p>
+    <a asp-action="Create">Создать запись</a>
+</p>
+
+@using (Html.BeginForm("Index", "Films", FormMethod.Get))
+{
+    <fieldset>
+        Поиск
+        <br>
+        По названию: @Html.TextBox("Name", Name)
+        По описанию: @Html.TextBox("Description", Description)
+        Минимальный возраст: @Html.TextBox("AgeLimit", AgeLimit)
+        Минимальная длительность: @Html.TextBox("Duration", Duration)
+        По жанру: @Html.DropDownList("GenreId", Model.Genres)
+        Компания: @Html.DropDownList("CompanyId", Model.FilmProductions)
+        Страна: @Html.DropDownList("CountryId", Model.CountryProductions)
+        <input type="submit" value="Поиск" />
+        <input class='button' type='reset' value="Сбросить">
+    </fieldset>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-FieldName="Name" asp-route-SortOrder="@SortOrder" asp-route-OldFieldName="@OldFieldName"  asp-route-Name="@Name" asp-route-Description="@Description" asp-route-AgeLimit="@AgeLimit" asp-route-Duration="@Duration" asp-route-CompanyId="@CompanyId" asp-route-GenreId="@GenreId" asp-route-CountryId="@CountryId">
+                    @Html.DisplayNameFor(model => model.Name)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-FieldName="Duration" asp-route-SortOrder="@SortOrder" asp-route-OldFieldName="@OldFieldName"  asp-route-Name="@Name" asp-route-Description="@Description" asp-route-AgeLimit="@AgeLimit" asp-route-Duration="@Duration" asp-route-CompanyId="@CompanyId" asp-route-GenreId="@GenreId" asp-route-CountryId="@CountryId">
+                    @Html.DisplayNameFor(model => model.Duration)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-FieldName="AgeLimit" asp-route-SortOrder="@SortOrder" asp-route-OldFieldName="@OldFieldName"  asp-route-Name="@Name" asp-route-Description="@Description" asp-route-AgeLimit="@AgeLimit" asp-route-Duration="@Duration" asp-route-CompanyId="@CompanyId" asp-route-GenreId="@GenreId" asp-route-CountryId="@CountryId">
+                    @Html.DisplayNameFor(model => model.AgeLimit)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-FieldName="Desription" asp-route-SortOrder="@SortOrder" asp-route-OldFieldName="@OldFieldName"  asp-route-Name="@Name" asp-route-Description="@Description" asp-route-AgeLimit="@AgeLimit" asp-route-Duration="@Duration" asp-route-CompanyId="@CompanyId" asp-route-GenreId="@GenreId" asp-route-CountryId="@CountryId">
+                    @Html.DisplayNameFor(model => model.Description)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-FieldName="CountryProduction" asp-route-SortOrder="@SortOrder" asp-route-OldFieldName="@OldFieldName"  asp-route-Name="@Name" asp-route-Description="@Description" asp-route-AgeLimit="@AgeLimit" asp-route-Duration="@Duration" asp-route-CompanyId="@CompanyId" asp-route-GenreId="@GenreId" asp-route-CountryId="@CountryId">
+                    @Html.DisplayNameFor(model => model.CountryProductionId)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-FieldName="FilmProduction" asp-route-SortOrder="@SortOrder" asp-route-OldFieldName="@OldFieldName"  asp-route-Name="@Name" asp-route-Description="@Description" asp-route-AgeLimit="@AgeLimit" asp-route-Duration="@Duration" asp-route-CompanyId="@CompanyId" asp-route-GenreId="@GenreId" asp-route-CountryId="@CountryId">
+                    @Html.DisplayNameFor(model => model.FilmProductionId)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-FieldName="Genre" asp-route-SortOrder="@SortOrder" asp-route-OldFieldName="@OldFieldName"  asp-route-Name="@Name" asp-route-Description="@Description" asp-route-AgeLimit="@AgeLimit" asp-route-Duration="@Duration" asp-route-CompanyId="@CompanyId" asp-route-GenreId="@GenreId" asp-route-CountryId="@CountryId">
+                    @Html.DisplayNameFor(model => model.GenreId)
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Films) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Duration)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AgeLimit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CountryProduction.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FilmProduction.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Genre.Name)
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Детали</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<page-link page-model="Model.PageViewModel" page-action="Index"
+           page-url-Name="@Name"
+           page-url-Description="@Description"
+           page-url-AgeLimit="@AgeLimit"
+           page-url-Duration="@Duration"
+           page-url-GenreId="@GenreId"
+           page-url-CompanyId="@CompanyId"
+           page-url-CountryId="@CountryId"
+           page-url-OldFieldName="@OldFieldName"
+           page-url-SortOrder="@SortOrder"></page-link>

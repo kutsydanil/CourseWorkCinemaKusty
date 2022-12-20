@@ -1,0 +1,30 @@
+﻿@model WebCinema.ViewModel.Users.DeleteUserViewModel
+@{
+    ViewData["Title"] = "Удаление пользователя";
+}
+
+<div class="row">
+    <div class="col-md-5">
+        <h3>Вы уверены, что хотите удалить пользователя?</h3>
+        <hr />
+
+        <b>Почта:</b> @Model.Email<br>
+        <b>Роли:</b>
+       
+        <ul>
+            @foreach (var role in Model.UserRoles)
+            {
+                <li>@role</li>
+            }
+        </ul>
+          
+        <form asp-action="Delete" asp-controller="Users">
+            <input type="submit" value="Удалить" class="btn btn-primary" />
+            <a class=" btn btn-danger" asp-action="Index">Назад</a>
+        </form>
+
+    </div>
+</div>
+
+
+

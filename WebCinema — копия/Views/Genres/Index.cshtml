@@ -1,0 +1,52 @@
+﻿@model GenresViewModel
+@{
+    ViewData["Title"] = "Жанры фильмов";
+    string GenreName = Model.GenreName;
+    string FieldName = "GenreName";
+}
+
+<h1>Жанры фильмов</h1>
+
+<p>
+    <a asp-action="Create">Добавить запись</a>
+</p>
+
+@using (Html.BeginForm("Index", "Genres", FormMethod.Get)) 
+{
+    <fieldset>
+        Поиск по названию: @Html.TextBox("GenreName", "")
+        <input type="submit" value="Поиск"/>
+        <input class='button' type='reset' value="Сбросить">
+    </fieldset>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-SortOrder="@Model.SortViewModel.CurrentState" asp-route-OldFieldName="GenreName" asp-route-FieldName="GenreName" asp-route-GenreName="@GenreName">
+                    @Html.DisplayNameFor(model => model.GenreName)
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Genres)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<page-link page-model="Model.PageViewModel" page-action="Index"
+           page-url-GenreName="@GenreName"
+           page-url-OldFieldName="@FieldName"
+           page-url-sortOrder="@(Model.SortViewModel.CurrentState)"></page-link>

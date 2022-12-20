@@ -1,0 +1,105 @@
+﻿@model CinemaCore.Models.ListEvents
+@*@Model.Date.ToShortDateString()*@
+
+@{
+    ViewData["Title"] = "Редактирование записи";
+    int index = 0;
+    CinemaCore.Models.CinemaHalls CinemaHalls = (CinemaCore.Models.CinemaHalls) ViewData["CinemaHalls"];
+    List<CinemaCore.Models.Places> Places = (List<CinemaCore.Models.Places>)ViewData["Places"];
+    List<SelectList> StaffsSelect = (List<SelectList>)ViewData["StaffsSelect"];
+    List<CinemaCore.Models.Staffs> Staff = (List<CinemaCore.Models.Staffs>)ViewData["Staff"];
+}
+
+<div class="row">
+        <h3>Редактирование записи</h3>
+        <hr />        
+        <div class="col-md-4">
+            <form asp-action="Edit">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-floating mb-3">
+                <select asp-for="FilmId" class="form-control" asp-items="ViewBag.FilmId"></select>
+                <label asp-for="FilmId" class="control-label"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Date" class="form-control" />
+                <label asp-for="Date" class="control-label"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="StartTime" class="form-control" />
+                <label asp-for="StartTime" class="control-label"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="EndTime" class="form-control" />
+                <label asp-for="EndTime" class="control-label"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input name="TicketPrice" value="@String.Format("{0:0.00}", Model.TicketPrice)" @*asp-for="TicketPrice"*@ class="form-control" />
+                <label asp-for="TicketPrice" class="control-label"></label>
+            </div>
+            <div class="form-floating mb-3">    
+                @*<select asp-for="CinemaHallId" class="form-control" asp-items="ViewBag.CinemaHallsId" readonly></select>*@
+                <input asp-for="CinemaHallId" class="form-control" readonly/>
+                <label asp-for="CinemaHallId" class="control-label"></label>
+            </div>
+            <div class="form-floating">
+                <input type="submit" value="Сохранить" class="btn btn-secondary" />
+                <a asp-action="Index" class="btn btn-primary">Назад</a>
+            </div>
+        </form>
+        </div>
+        <div class="col-md-4">
+            <table class="places-table">
+                @for (var i = 0; i < CinemaHalls.Rows; i++)
+                {
+                    <tr>
+                        @for (var j = 0; j < CinemaHalls.Columns; j++)
+                        {
+                            string classname = "nontaken";
+                            int number = (j + 1) + i * CinemaHalls.Columns;
+                            var place = Places.FirstOrDefault(p => p.PlaceNumber == number);
+
+                            @if (place != null && place.TakenSeat)
+                            {
+                                classname = "taken";
+                                index++;
+                            }
+
+                            <td class="@classname">
+                                <a asp-action="Edit" asp-route-Id="@Model.Id" asp-route-seatNumber="@number">
+                                    @number
+                                </a>
+                            </td>
+                        }
+                    </tr>
+                }
+            </table>
+        </div>
+        <div class="col-md-4">
+            <p>
+                Сотрyдники:
+                <br>
+                <a asp-action="Edit" asp-route-AddNewStaff="@true">Добавить сотрудника</a>
+            </p>
+            <form asp-action="Edit" asp-route-Id="@Model.Id">
+                <ul id="staff-list">
+                    @for (var i = 0; i < StaffsSelect.Count(); i++)
+                    {
+                        @Html.DropDownList($"StaffCastId", StaffsSelect[i])
+                        ;
+                        <br>
+                        <a asp-action="Edit" asp-route-DeleteStaffId="@StaffsSelect[i].SelectedValue">Удалить</a>
+                        <br>
+                    }
+                </ul>
+                <br>
+                <input value="Сохранить список сотрудников" type="button" onclick="sendStaff()" class="btn btn-primary" />
+            </form>
+        </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

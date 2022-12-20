@@ -1,0 +1,127 @@
+﻿@model ListEventsViewModel
+
+@{
+    ViewData["Title"] = "Сеансы";
+    int FilmId = Model.FilmId;
+    string Description = Model.Description;
+    DateTime Date = Model.Date;
+    string OldFieldName = Model.SortViewModel.FieldName;
+    int HallId = Model.HallId;
+    decimal Price = Model.TicketPrice;
+    bool SearchForDate = Model.SearchForDate;
+    SortState SortOrder = Model.SortViewModel.CurrentState;
+}
+
+<h1>Сеансы</h1>
+
+<p>
+    <a asp-action="Create">Создать запись</a>
+</p>
+
+@using (Html.BeginForm("Index", "ListEvents", FormMethod.Get))
+{
+    <fieldset>
+        Поиск
+        <br>
+        Фильм: @Html.DropDownList("FilmId", Model.Films)
+        Зал: @Html.DropDownList("HallId", Model.Halls)
+        Минимальная цена: @Html.TextBox("Price", "")
+        По описанию: @Html.TextBox("Description", "")
+        По дате @Html.CheckBox("SearchForDate", false)
+        Дата: @Html.EditorFor(model => model.Date, new {htmlAttributes = new {@class = "datepicker"}})
+        <input type="submit" value="Поиск" />
+        <input class='button' type='reset' value="Сбросить">
+    </fieldset>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-FieldName="FilmName" asp-route-OldFieldName="@OldFieldName" asp-route-FilmdId="@FilmId" asp-route-HallId="@HallId" asp-route-SearchForDate="@SearchForDate" asp-route-Price="@Price" asp-route-Description="@Description" asp-route-SortOrder="@SortOrder">
+                    @Html.DisplayNameFor(model => model.Films)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-FieldName="HallNumber" asp-route-OldFieldName="@OldFieldName" asp-route-FilmdId="@FilmId" asp-route-HallId="@HallId" asp-route-SearchForDate="@SearchForDate" asp-route-Price="@Price" asp-route-Description="@Description" asp-route-SortOrder="@SortOrder">
+                    @Html.DisplayNameFor(model => model.Halls)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-FieldName="Date" asp-route-OldFieldName="@OldFieldName" asp-route-FilmdId="@FilmId" asp-route-HallId="@HallId" asp-route-SearchForDate="@SearchForDate" asp-route-Price="@Price" asp-route-Description="@Description" asp-route-SortOrder="@SortOrder">
+                    @Html.DisplayNameFor(model => model.Date)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndTime)
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-FieldName="Price" asp-route-OldFieldName="@OldFieldName" asp-route-FilmdId="@FilmId" asp-route-HallId="@HallId" asp-route-SearchForDate="@SearchForDate" asp-route-Price="@Price" asp-route-Description="@Description" asp-route-SortOrder="@SortOrder">
+                    @Html.DisplayNameFor(model => model.TicketPrice)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-FieldName="Description" asp-route-OldFieldName="@OldFieldName" asp-route-FilmdId="@FilmId" asp-route-HallId="@HallId" asp-route-SearchForDate="@SearchForDate" asp-route-Price="@Price" asp-route-Description="@Description" asp-route-SortOrder="@SortOrder">
+                    @Html.DisplayNameFor(model => model.Description)
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.ListEvents) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Film.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CinemaHall.HallNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TicketPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Film.Description)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $(".datepicker").datepicker({
+                dateFormat: "dd-mm-yy",
+                changemonth: true,
+                changeyear: true
+            });
+        });
+    </script>
+}
+
+    <page-link page-model="Model.PageViewModel" page-action="Index"
+           page-url-FilmId="@FilmId"
+           page-url-Description="@Description"
+           page-url-Price="@Price"
+           page-url-HallId="@HallId"
+           page-url-SearchForDate="@SearchForDate"
+           page-url-Date="@Date"
+           page-url-OldFieldName="@OldFieldName"
+           page-url-SortOrder="@SortOrder"></page-link>

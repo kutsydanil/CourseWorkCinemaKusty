@@ -1,0 +1,37 @@
+﻿@model CinemaCore.Models.ListEvents
+
+@{
+    ViewData["Title"] = "Удаление события";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <h3>Удалить запись?</h3>
+        <hr />
+        <div class="col-sm-2">
+            <b>@Html.DisplayNameFor(model => model.Film.Name):</b> @Html.DisplayFor(model => model.Film.Name)
+        </div>
+        <div class="col-sm-2">
+            <b>@Html.DisplayNameFor(model => model.TicketPrice):</b> @Html.DisplayFor(model => model.TicketPrice)
+        </div>
+        <div class="col-sm-2">
+            <b>@Html.DisplayNameFor(model => model.Date):</b> @Html.DisplayFor(model => model.Date)
+        </div>
+        <div class="col-sm-2">
+            <b>@Html.DisplayNameFor(model => model.StartTime):</b> @Html.DisplayFor(model => model.StartTime)
+        </div>
+        <div class="col-sm-2">
+            <b>@Html.DisplayNameFor(model => model.EndTime):</b> @Html.DisplayFor(model => model.EndTime)
+        </div>
+    </div>
+    
+    <form asp-action="Delete" asp-controller="ListEvents">
+        <div class="form-floating mb-3">
+            <div class="form-floating mb-3"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="submit" value="Удалить" class="btn btn-danger" />
+            <a class="btn btn-primary" asp-action="Index">Назад</a>
+        </div>
+    </form>
+</div>
+

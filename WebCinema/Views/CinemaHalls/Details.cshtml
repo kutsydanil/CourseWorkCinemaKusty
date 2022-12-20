@@ -1,0 +1,26 @@
+﻿@model CinemaCore.Models.CinemaHalls
+
+@{
+    ViewData["Title"] = "Детали";
+}
+
+<div>
+    <h3>Подробности о зале</h3>
+    <hr />
+    <div class="col-md-4">
+        <div class="col-sm-2">
+            <b>@Html.DisplayNameFor(model => model.HallNumber):</b> @Html.DisplayFor(model => model.HallNumber)
+        </div>
+        <div class="col-sm-2">
+            <b>@Html.DisplayNameFor(model => model.MaxPlaceNumber):</b> @Html.DisplayFor(model => model.MaxPlaceNumber)
+        </div>
+    </div>
+    <form asp-action="Edit" asp-controller="Actors">
+        <div class="form-floating mb-3"></div>
+        <div class="form-floating">
+            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-secondary">Редактировать запись</a>
+            <a class="btn btn-primary" asp-action="Index">Назад</a>
+        </div>
+    </form>
+</div>
+

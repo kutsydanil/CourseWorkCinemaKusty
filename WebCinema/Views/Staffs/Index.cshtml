@@ -1,0 +1,100 @@
+﻿@model StaffsViewModel
+@{
+    ViewData["Title"] = "Сотрудники";
+    string Name = Model.Name;
+    string Surname = Model.Surname;
+    string MiddleName = Model.MiddleName;
+    string Post = Model.Post;
+    int WorkExp = Model.WorkExperience;
+    SortState SortOrder = Model.SortViewModel.CurrentState;
+    string OldFieldName = Model.SortViewModel.FieldName;
+}
+
+<h1>Сотрудники</h1>
+
+<p>
+    <a asp-action="Create">Создать запись</a>
+</p>
+
+<form method="get">
+    <label>Имя</label>
+    <input name="Name" value="@Name"/>
+    <label>Фамилия</label>
+    <input name="Surname" value="@Surname"/>
+    <label>Отчество</label>
+    <input name="MiddleName" value="@MiddleName"/>
+    <label>Должность</label>
+    <input name="Post" value="@Post" />
+    <label>Стаж</label>
+    <input name="WorkExp" value="@WorkExp" />
+
+    <input type="reset" value="Сбросить" class="btn btn-primary">
+    <input type="submit" value="Поиск" class="btn btn-primary" />
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-FieldName="Name" asp-route-SortOrder="@SortOrder" asp-route-OldFieldName="@OldFieldName" asp-route-Name="@Name" asp-route-Surname="Surname" asp-route-MiddleName="MiddleName" asp-route-Post="Post" asp-route-WorkExperience="WorkExperience">
+                    @Html.DisplayNameFor(model => model.Name)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-FieldName="Surname" asp-route-SortOrder="@SortOrder" asp-route-OldFieldName="@OldFieldName" asp-route-Name="@Name" asp-route-Surname="@Surname" asp-route-MiddleName="@MiddleName" asp-route-Post="@Post" asp-route-WorkExperience="@WorkExp">
+                    @Html.DisplayNameFor(model => model.Surname)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-FieldName="MiddleName" asp-route-SortOrder="@SortOrder" asp-route-OldFieldName="@OldFieldName" asp-route-Name="@Name" asp-route-Surname="@Surname" asp-route-MiddleName="@MiddleName" asp-route-Post="@Post" asp-route-WorkExperience="@WorkExp">
+                    @Html.DisplayNameFor(model => model.MiddleName)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-FieldName="Post" asp-route-SortOrder="@SortOrder" asp-route-OldFieldName="@OldFieldName" asp-route-Name="@Name" asp-route-Surname="@Surname" asp-route-MiddleName="@MiddleName" asp-route-Post="@Post" asp-route-WorkExperience="@WorkExp">
+                    @Html.DisplayNameFor(model => model.Post)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-FieldName="WorkExperience" asp-route-SortOrder="@SortOrder" asp-route-OldFieldName="@OldFieldName" asp-route-Name="@Name" asp-route-Surname="@Surname" asp-route-MiddleName="@MiddleName" asp-route-Post="@Post" asp-route-WorkExperience="@WorkExp">
+                    @Html.DisplayNameFor(model => model.WorkExperience)
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Staffs) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Surname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MiddleName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Post)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkExperience)
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Детали</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<page-link page-model="Model.PageViewModel" page-action="Index"
+           page-url-Name="@Name"
+           page-url-Surname="@Surname"
+           page-url-MiddleName="@MiddleName"
+           page-url-WorkExperinece="@WorkExp"
+           page-url-Post="@Post"
+           page-url-OldFieldName="@OldFieldName"
+           page-url-SortOrder="@SortOrder"></page-link>

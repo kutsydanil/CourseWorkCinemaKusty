@@ -1,0 +1,30 @@
+﻿@model CinemaCore.Models.CinemaHalls
+
+@{
+    ViewData["Title"] = "Удаление зала";
+}
+
+<h1>Удаление</h1>
+
+<h3>Вы действительно желаете удалить запись?</h3>
+<div class="row">
+    <div class="col-md-4">
+        <h3>Удалить запись?</h3>
+        <hr />
+        <div class="col-sm-2">
+            <b>@Html.DisplayNameFor(model => model.HallNumber):</b> @Html.DisplayFor(model => model.HallNumber)
+        </div>
+        <div class="col-sm-2">
+            <b>@Html.DisplayNameFor(model => model.MaxPlaceNumber):</b> @Html.DisplayFor(model => model.MaxPlaceNumber)
+        </div>
+    </div>
+    
+    <form asp-action="Delete" asp-controller="CinemaHalls">
+        <div class="form-floating mb-3">
+            <div class="form-floating mb-3"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="submit" value="Удалить" class="btn btn-danger" />
+            <a class="btn btn-primary" asp-action="Index">Назад</a>
+        </div>
+    </form>
+</div>

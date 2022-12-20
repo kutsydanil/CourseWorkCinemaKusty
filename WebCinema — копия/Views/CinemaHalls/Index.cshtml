@@ -1,0 +1,64 @@
+﻿@model CinemaHallViewModel
+
+@{
+    ViewData["Title"] = "Залы";
+    string HallNumber = Model.HallNumber.HasValue ? Model.HallNumber.Value.ToString() : "";
+    string MinPlaceNumber = Model.MaxPlaceNumber.HasValue ? Model.MaxPlaceNumber.Value.ToString() : "";
+    string FieldName = Model.SortViewModel.FieldName;
+}
+
+<h1>Залы</h1>
+
+<p>
+    <a asp-action="Create">Создать запись</a>
+</p>
+
+@using (Html.BeginForm("Index", "CinemaHalls", FormMethod.Get))
+{
+    <fieldset>
+        Поиск по номеру: @Html.TextBox("Number", "")
+        Минимальное количество мест: @Html.TextBox("PlaceNumber", "")
+        <input type="submit" value="Поиск" />
+        <input class='button' type='reset' value="Сбросить">
+    </fieldset>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-SortOrder="@Model.SortViewModel.CurrentState" asp-route-FieldName="HallNumber" asp-route-OldFieldName="@FieldName" asp-route-HallNumber="@HallNumber" asp-route-MaxPlaceNumber="@MinPlaceNumber">
+                @Html.DisplayNameFor(model => model.HallNumber)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-SortOrder="@Model.SortViewModel.CurrentState" asp-route-FieldName="MaxPlaceNumber" asp-route-OldFieldName="@FieldName" asp-route-HallNumber="@HallNumber" asp-route-MaxPlaceNumber="@MinPlaceNumber">
+                @Html.DisplayNameFor(model => model.MaxPlaceNumber)
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.CinemaHalls) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.HallNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxPlaceNumber)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<page-link page-model="Model.PageViewModel" page-action="Index"
+           page-url-HallNumber="@HallNumber"
+           page-url-MaxPlaceNumber="@MinPlaceNumber"
+           page-url-OldFieldName="@FieldName"
+           page-url-SortOrder="@(Model.SortViewModel.CurrentState)"></page-link>

@@ -1,0 +1,75 @@
+﻿@model ListEventsEditViewModel
+
+@{
+    ViewData["Title"] = "Подробнее";
+    int index = 0;
+}
+
+<h1>Подробнее</h1>
+
+<div>
+    <h4>Сеансы</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ListEvents.FilmId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ListEvents.Film.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ListEvents.Date)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ListEvents.Date)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ListEvents.StartTime)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ListEvents.StartTime)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ListEvents.EndTime)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ListEvents.EndTime)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ListEvents.TicketPrice)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ListEvents.TicketPrice)
+        </dd>
+    </dl>
+</div>
+<table class="places-table">
+@for(var i = 0; i < Model.CinemaHalls.Rows; i++) {
+     <tr>
+     @for(var j = 0; j < Model.CinemaHalls.Columns; j++) {  
+            string classname = "nontaken";
+            int number = (j + 1) + i * Model.CinemaHalls.Columns;
+            var place = Model.Places.FirstOrDefault(p => p.PlaceNumber == number);
+
+            @if (place != null && place.TakenSeat)
+            {
+                classname = "taken";
+                index++;
+            }
+            <td class="@classname">@number</td>
+     }
+     </tr>
+ }
+</table>
+ <p>Сотрyдники:</p>
+ <ul>
+@for(var i = 0; i < Model.Staffs.Count(); i++) {
+    var staff = Model.Staffs.ElementAt(i);
+    var line = $"{staff.Surname} {staff.Name} {staff.MiddleName}";
+    <li>@line</li>
+}
+ </ul>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.ListEvents.Id">Изменить</a> |
+    <a asp-action="Index">Вернуться к списку</a>
+</div>

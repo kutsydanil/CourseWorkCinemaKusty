@@ -1,0 +1,65 @@
+﻿@model ListEventsEditViewModel
+
+@{
+    ViewData["Title"] = "Детали";
+    int index = 0;
+}
+
+<div class="row">
+    <h3>Подробности о сеансе</h3>
+    <hr />
+    <div class="col-md-4">
+        <div class="col-sm-2">
+            <b>@Html.DisplayNameFor(model => model.ListEvents.Film.Name):</b> @Html.DisplayFor(model => model.ListEvents.Film.Name)
+        </div>
+        <div class="col-sm-2">
+            <b>@Html.DisplayNameFor(model => model.ListEvents.Date):</b> @Html.DisplayFor(model => model.ListEvents.Date)
+        </div>
+        <div class="col-sm-2">
+            <b>@Html.DisplayNameFor(model => model.ListEvents.StartTime):</b> @Html.DisplayFor(model => model.ListEvents.StartTime)
+        </div>
+        <div class="col-sm-2">
+            <b>@Html.DisplayNameFor(model => model.ListEvents.EndTime):</b> @Html.DisplayFor(model => model.ListEvents.EndTime)
+        </div>
+    </div>
+    <div class="col-md-4">
+        <table class="places-table">
+            @for (var i = 0; i < Model.CinemaHalls.Rows; i++)
+            {
+                <tr>
+                    @for (var j = 0; j < Model.CinemaHalls.Columns; j++)
+                    {
+                        string classname = "nontaken";
+                        int number = (j + 1) + i * Model.CinemaHalls.Columns;
+                        var place = Model.Places.FirstOrDefault(p => p.PlaceNumber == number);
+
+                        @if (place != null && place.TakenSeat)
+                        {
+                            classname = "taken";
+                            index++;
+                        }
+                        <td class="@classname">@number</td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="col-md-4">
+        <p>Сотрyдники:</p>
+        <ul>
+            @for (var i = 0; i < Model.Staffs.Count(); i++)
+            {
+                var staff = Model.Staffs.ElementAt(i);
+                var line = $"{staff.Surname} {staff.Name} {staff.MiddleName}";
+                <li>@line</li>
+            }
+        </ul>
+    </div>
+    <form asp-action="Edit" asp-controller="ListEventsEditViewModel">
+        <div class="form-floating mb-3"></div>
+        <div class="form-floating">
+            <a asp-action="Edit" asp-route-id="@Model?.ListEvents.Id" class="btn btn-secondary">Редактировать запись</a>
+            <a class="btn btn-primary" asp-action="Index">Назад</a>
+        </div>
+    </form>
+</div>

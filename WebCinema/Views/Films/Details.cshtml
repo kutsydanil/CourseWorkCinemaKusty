@@ -1,0 +1,30 @@
+﻿@model CinemaCore.Models.Films
+
+
+@{
+    ViewData["Title"] = "Детали";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <h3>Подробности о фильме</h3>
+        <hr />
+        <div class="col-sm-3">
+            <b>@Html.DisplayNameFor(model => model.Name):</b> @Html.DisplayFor(model => model.Name)
+            <b>@Html.DisplayNameFor(model => model.Duration):</b> @Html.DisplayFor(model => model.Duration)
+            <b>@Html.DisplayNameFor(model => model.AgeLimit):</b> @Html.DisplayFor(model => model.AgeLimit)
+            <b>@Html.DisplayNameFor(model => model.Description):</b> @Html.DisplayFor(model => model.Description)
+            <b>@Html.DisplayNameFor(model => model.CountryProduction.Name):</b> @Html.DisplayFor(model => model.CountryProduction.Name)
+            <b>@Html.DisplayNameFor(model => model.FilmProduction.Name):</b> @Html.DisplayFor(model => model.FilmProduction.Name)
+            <b>@Html.DisplayNameFor(model => model.Genre.Name):</b> @Html.DisplayFor(model => model.Genre.Name)
+        </div>
+    </div>
+    <form asp-action="Edit" asp-controller="Films">
+        <div class="form-floating mb-3"></div>
+        <div class="form-floating">
+            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-secondary">Редактировать запись</a>
+            <a class="btn btn-primary" asp-action="Index">Назад</a>
+        </div>
+    </form>
+
+</div>

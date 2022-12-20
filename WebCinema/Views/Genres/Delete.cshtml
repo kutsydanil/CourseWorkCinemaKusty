@@ -1,0 +1,22 @@
+﻿@model CinemaCore.Models.Genres
+
+@{
+    ViewData["Title"] = "Удаление жанра";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <h3>Удалить запись?</h3>
+        <hr />
+        <b>@Html.DisplayNameFor(model => model.Name):</b> @Html.DisplayFor(model => model.Name)<br>
+    </div>
+
+    <form asp-action="Delete" asp-controller="Genres">
+        <div class="form-floating mb-3">
+            <div class="form-floating mb-3"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="submit" value="Удалить" class="btn btn-danger" />
+            <a class="btn btn-primary" asp-action="Index">Назад</a>
+        </div>
+    </form>
+</div>

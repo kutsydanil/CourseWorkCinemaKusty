@@ -1,0 +1,107 @@
+﻿@model CinemaCore.Models.ListEvents
+
+@{
+    ViewData["Title"] = "Изменить";
+    int index = 0;
+    CinemaCore.Models.CinemaHalls CinemaHalls = (CinemaCore.Models.CinemaHalls) ViewData["CinemaHalls"];
+    List<CinemaCore.Models.Places> Places = (List<CinemaCore.Models.Places>)ViewData["Places"];
+    List<SelectList> StaffsSelect = (List<SelectList>)ViewData["StaffsSelect"];
+    List<CinemaCore.Models.Staffs> Staff = (List<CinemaCore.Models.Staffs>)ViewData["Staff"];
+}
+
+<h1>Изменить</h1>
+
+<h4>Сеансы</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="FilmId" class="control-label"></label>
+                <select asp-for="FilmId" class="form-control" asp-items="ViewBag.FilmId"></select>
+                <span asp-validation-for="FilmId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartTime" class="control-label"></label>
+                <input asp-for="StartTime" class="form-control" />
+                <span asp-validation-for="StartTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndTime" class="control-label"></label>
+                <input asp-for="EndTime" class="form-control" />
+                <span asp-validation-for="EndTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TicketPrice" class="control-label"></label>
+                <input asp-for="TicketPrice" class="form-control" />
+                <span asp-validation-for="TicketPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CinemaHallId" class="control-label"></label>
+                <select asp-for="CinemaHallId" class="form-control" asp-items="ViewBag.CinemaHallsId"></select>
+                <span asp-validation-for="CinemaHallId" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<br>
+
+<table class="places-table">
+    @for (var i = 0; i < CinemaHalls.Rows; i++)
+    {
+        <tr>
+            @for (var j = 0; j < CinemaHalls.Columns; j++)
+            {
+                string classname = "nontaken";
+                int number = (j + 1) + i * CinemaHalls.Columns;
+                var place = Places.FirstOrDefault(p => p.PlaceNumber == number);
+                
+                @if (place != null && place.TakenSeat)
+                {
+                    classname = "taken";
+                    index++;
+                }
+
+                <td class="@classname">
+                    <a asp-action="Edit" asp-route-Id="@Model.Id" asp-route-seatNumber="@number">
+                        @number
+                    </a>
+                </td>
+            }
+        </tr>
+    }
+</table>
+<p>Сотрyдники:
+<br>
+<a asp-action="Edit" asp-route-AddNewStaff="@true">Добавить сотрудника</a>
+</p>
+<form asp-action="Edit" asp-route-Id="@Model.Id">
+    <ul id="staff-list">
+        @for (var i = 0; i < StaffsSelect.Count(); i++)
+        {
+            @Html.DropDownList($"StaffCastId", StaffsSelect[i]);
+            <br>
+            <a asp-action="Edit" asp-route-DeleteStaffId="@StaffsSelect[i].SelectedValue">Удалить</a>
+            <br>
+        }
+    </ul>
+    <input value="Сохранить" type="button" onclick="sendStaff()" class="btn btn-primary" />
+</form><div>
+    <a asp-action="Index">Вернуться к списку</a>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

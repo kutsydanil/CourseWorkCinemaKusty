@@ -1,0 +1,39 @@
+﻿@model CinemaCore.Models.CinemaHalls
+
+@{
+    ViewData["Title"] = "Измнение";
+}
+
+<h1>Изменение</h1>
+
+<h4>CinemaHalls</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="HallNumber" class="control-label"></label>
+                <input asp-for="HallNumber" class="form-control" />
+                <span asp-validation-for="HallNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxPlaceNumber" class="control-label"></label>
+                <input asp-for="MaxPlaceNumber" class="form-control" />
+                <span asp-validation-for="MaxPlaceNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Изменить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Вернуться к списку</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

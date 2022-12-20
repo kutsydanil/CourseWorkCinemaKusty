@@ -1,0 +1,38 @@
+﻿@model CinemaCore.Models.Actors
+
+@{
+    ViewData["Title"] = "Создание записи";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <h3>Добавление страны-производителя</h3>
+        <hr />
+        <form asp-action="Create">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-floating mb-3">
+                <input asp-for="Surname" class="form-control" />
+                <label asp-for="Surname" class="control-label"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Name" class="form-control">
+                <label asp-for="Name" class="control-label"></label>
+            </div>
+            <div class="form-floationg mb-3">
+                <input asp-for="MiddleName" class="form-control">
+                <label asp-for="MiddleName" class="control-label"></label>
+            </div>
+            <div class="form-floating">
+                <input type="submit" value="Создать" class="btn btn-secondary" />
+                <a asp-action="Index" class="btn btn-primary">Вернуться назад</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

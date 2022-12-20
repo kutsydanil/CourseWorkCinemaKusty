@@ -1,0 +1,46 @@
+﻿@model CinemaCore.Models.Staffs
+
+@{
+    ViewData["Title"] = "Редактирование записи";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <h3>Редактирование записи</h3>
+        <hr />
+        <form asp-action="Edit">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <input asp-for="Surname" class="form-control" />
+                <label asp-for="Surname" class="control-label"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Name" class="form-control" />
+                <label asp-for="Name" class="control-label"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="MiddleName" class="form-control" />
+                <label asp-for="MiddleName" class="control-label"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Post" class="form-control" />
+                <label asp-for="Post" class="control-label"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="WorkExperience" class="form-control" />
+                <label asp-for="WorkExperience" class="control-label"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="submit" value="Сохранить" class="btn btn-secondary" />
+                <a asp-action="Index" class="btn btn-primary">Назад</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

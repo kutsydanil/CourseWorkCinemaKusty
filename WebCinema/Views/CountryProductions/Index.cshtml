@@ -1,0 +1,52 @@
+﻿@model CountryProductionsViewModel 
+
+@{
+    ViewData["Title"] = "Страны производства";
+    string Name = Model.CountryName;
+    string FieldName = "CountryName";
+}
+
+<h1>Страна-производитель</h1>
+
+<p>
+    <a asp-action="Create">Создать запись</a>
+</p>
+
+<form method="get">
+    <label>Страна</label>
+    <input name="CountryName" value="@Name" />
+    <input type="reset" value="Сбросить" class="btn btn-primary">
+    <input type="submit" value="Поиск" class="btn btn-primary" />
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-SortOrder="@Model.SortViewModel.CurrentState" asp-route-OldFieldName="CountryName"  asp-route-FieldName="CountryName" asp-route-CountryName="@Name">
+                    @Html.DisplayNameFor(model => model.CountryName)
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.CountryProductions) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Детали</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<page-link page-model="Model.PageViewModel" page-action="Index"
+           page-url-CountryName="@Name"
+           page-url-OldFieldName="FieldName"
+           page-url-SortOrder="@(Model.SortViewModel.CurrentState)"></page-link>

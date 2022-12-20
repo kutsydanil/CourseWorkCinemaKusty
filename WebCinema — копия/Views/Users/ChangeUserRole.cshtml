@@ -1,0 +1,30 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@model WebCinema.ViewModel.Users.ChangeUserRoleViewModel
+@{
+    ViewData["Title"] = "Редактирование ролей";
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <h3>Редактирование ролей пользователя @Model.Email</h3>
+        <hr />
+        <form asp-action="ChangeUserRole" asp-controller="Users" method="post">
+            <div class="form-floating mb-1">
+                @foreach (IdentityRole role in Model.AllRoles)
+                {
+                    <div>
+                        <input class="form-check-input" name="roles" type="checkbox" value="@role.Name"
+                           @(Model.UserRoles.Contains(role.Name) ? "checked=\"checked\"" : "") />
+                        <label class="form-check-label">@role.Name</label>
+                    </div>
+                }
+            </div>
+            <div class="form-floating mb-3">
+                <input type="submit" value="Сохранить изменения" class="btn btn-primary" />
+                <a class=" btn btn-danger" asp-action="Index">Назад</a>
+            </div>
+        </form>
+
+    </div>
+</div>
+

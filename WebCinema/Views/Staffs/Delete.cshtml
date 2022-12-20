@@ -1,0 +1,36 @@
+﻿@model CinemaCore.Models.Staffs
+
+@{
+    ViewData["Title"] = "Удаление сотрудника";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <h3>Удалить запись?</h3>
+        <hr />
+        <div class="col-sm-2">
+            <b>@Html.DisplayNameFor(model => model.Surname):</b> @Html.DisplayFor(model => model.Surname)
+        </div>
+        <div class="col-sm-2">
+            <b>@Html.DisplayNameFor(model => model.Name):</b> @Html.DisplayFor(model => model.Name)
+        </div>
+        <div class="col-sm-2">
+            <b>@Html.DisplayNameFor(model => model.MiddleName):</b> @Html.DisplayFor(model => model.MiddleName)
+        </div>
+        <div class="col-sm-2">
+            <b>@Html.DisplayNameFor(model => model.Post):</b> @Html.DisplayFor(model => model.Post)
+        </div>
+        <div class="col-sm-2">
+            <b>@Html.DisplayNameFor(model => model.WorkExperience):</b> @Html.DisplayFor(model => model.WorkExperience)
+        </div>
+    </div>
+
+    <form asp-action="Delete" asp-controller="Staffs">
+        <div class="form-floating mb-3">
+            <div class="form-floating mb-3"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="submit" value="Удалить" class="btn btn-danger" />
+            <a class="btn btn-primary" asp-action="Index">Назад</a>
+        </div>
+    </form>
+</div>

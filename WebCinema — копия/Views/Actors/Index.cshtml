@@ -1,0 +1,76 @@
+﻿@model ActorsViewModel
+
+@{
+    ViewData["Title"] = "Актёры";
+    string Name = Model.Name;
+    string Surname = Model.Surname;
+    string MiddleName = Model.MiddleName;
+    string OldFieldName = Model.SortViewModel.FieldName;
+    SortState SortOrder = Model.SortViewModel.CurrentState;
+}
+
+<h1>Актёры</h1>
+
+<p>
+    <a asp-action="Create">Создать запись</a>
+</p>
+
+@using (Html.BeginForm("Index", "Actors", FormMethod.Get))
+{
+    <fieldset>
+        Поиск по имени: @Html.TextBox("Name", "")
+        Поиск по фамилии: @Html.TextBox("Surname", "")
+        Поиск по отчеству: @Html.TextBox("MiddleName", "")
+        <input type="submit" value="Поиск" />
+        <input class='button' type='reset' value="Сбросить">
+    </fieldset>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-FieldName="Name" asp-route-SortOrder="@SortOrder" asp-route-OldFieldName="@OldFieldName" asp-route-Name="@Name" asp-route-Surname="@Surname" asp-route-MiddleName="@MiddleName">
+                    @Html.DisplayNameFor(model => model.Name)
+                </a>
+            </th>
+            <th>
+               <a asp-action="Index" asp-route-FieldName="Surname" asp-route-SortOrder="@SortOrder" asp-route-OldFieldName="@OldFieldName" asp-route-Name="@Name" asp-route-Surname="@Surname" asp-route-MiddleName="@MiddleName">
+                     @Html.DisplayNameFor(model => model.Surname)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-FieldName="MiddleName" asp-route-SortOrder="@SortOrder" asp-route-OldFieldName="@OldFieldName" asp-route-Name="@Name" asp-route-Surname="@Surname" asp-route-MiddleName="@MiddleName">
+                    @Html.DisplayNameFor(model => model.MiddleName)
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Actors) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Surname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MiddleName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Подробности</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<page-link page-model="Model.PageViewModel" page-action="Index"
+           page-url-Name="@Name"
+           page-url-Surname="@Surname"
+           page-url-MiddleName="@MiddleName"
+           page-url-OldFieldName="@OldFieldName"
+           page-url-SortOrder="@SortOrder"></page-link>

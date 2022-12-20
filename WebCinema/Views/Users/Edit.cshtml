@@ -1,0 +1,39 @@
+﻿@model WebCinema.Models.Users.EditUserViewModel
+@{
+    ViewData["Title"] = "Редактирование пользователя";
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <h3>Редактирование данных пользователя</h3>
+        <hr />
+        <form asp-action="Edit" asp-controller="Users">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" value="@Model.Email" asp-for="Email">
+                <label>Почта</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" asp-for="OldPassword" class="form-control">
+                <label>Старый пароль</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="password" asp-for="NewPassword" class="form-control">
+                <label>Новый пароль</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="submit" value="Сохранить изменения" class="btn btn-primary" />
+                <a class=" btn btn-danger" asp-action="Index">Назад</a>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

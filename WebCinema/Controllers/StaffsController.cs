@@ -1,0 +1,253 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using CinemaCore.Models;
+using WebCinema;
+using WebCinema.ViewModel;
+using Microsoft.CodeAnalysis.Operations;
+using WebCinema.CookieProccesorNamespace;
+
+namespace WebCinema.Controllers
+{
+    [Authorize()]
+    public class StaffsController : Controller
+    {
+        private readonly CinemaContext _context;
+        private const int _pageSize = 20;
+        private CacheProvider _cashProvider;
+        private string modelName = "StaffViewModel";
+
+        public StaffsController(CinemaContext context, CacheProvider cashProvider)
+        {
+            _context = context;
+            _cashProvider = cashProvider;
+        }
+
+        // GET: Staffs
+        public async Task<IActionResult> Index(SortState SortOrder, string FieldName, string OldFieldName, string Post, string Name, string Surname, string MiddleName, bool first = false, int WorkExperience = 0, int page = 1)
+        {
+            Post = CookieProccesor.GetSetValue("StaffPost", Post, first, Request, Response);
+            Name = CookieProccesor.GetSetValue("StaffName", Name, first, Request, Response);
+            Surname = CookieProccesor.GetSetValue("StaffSurname", Surname, first, Request, Response);
+            MiddleName = CookieProccesor.GetSetValue("StaffMiddleName",  MiddleName, first, Request, Response);
+            WorkExperience = CookieProccesor.GetSetValue<int>("StaffWorkExp", WorkExperience.ToString(), first, Request, Response);
+
+            var model = _cashProvider.GetItem<StaffsViewModel>(modelName);
+            
+            if (model != null && model.PageViewModel.PageNumber == page && model.Surname == Surname &&
+                model.Name == Name && model.MiddleName == MiddleName && model.WorkExperience == WorkExperience &&
+                ViewModelComparsion.Compare(model.SortViewModel, SortOrder, FieldName))
+            {
+                return View(model);
+            }
+
+            var staffs = Search(_context.Staffs, Name ?? "", Surname ?? "", MiddleName ?? "", WorkExperience, Post ?? "");
+
+            var count = staffs.Count();
+
+            var sortViewModel = new SortViewModel(SortOrder, FieldName, OldFieldName);
+
+            var staffContext = Sort(staffs, sortViewModel).Skip((page - 1) * _pageSize).Take(_pageSize);
+
+            var viewModel = new StaffsViewModel()
+            {
+                PageViewModel = new PageViewModel(count, page, _pageSize),
+                SortViewModel = sortViewModel,
+                Name = Name, 
+                Surname = Surname,
+                MiddleName = MiddleName, 
+                Post = Post, 
+                WorkExperience = WorkExperience,
+                Staffs = staffContext.ToList()
+            };
+
+            _cashProvider.SetItem(viewModel, modelName);
+
+            return View(viewModel);
+        }
+
+        // GET: Staffs/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null || _context.Staffs == null)
+            {
+                return NotFound();
+            }
+
+            var staffs = await _context.Staffs
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (staffs == null)
+            {
+                return NotFound();
+            }
+
+            return View(staffs);
+        }
+
+        // GET: Staffs/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Staffs/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,Name,Surname,MiddleName,Post,WorkExperience")] Staffs staffs)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(staffs);
+                await _context.SaveChangesAsync();
+                _cashProvider.SetItem(null, modelName);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(staffs);
+        }
+
+        // GET: Staffs/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || _context.Staffs == null)
+            {
+                return NotFound();
+            }
+
+            var staffs = await _context.Staffs.FindAsync(id);
+            if (staffs == null)
+            {
+                return NotFound();
+            }
+            return View(staffs);
+        }
+
+        // POST: Staffs/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Surname,MiddleName,Post,WorkExperience")] Staffs staffs)
+        {
+            if (id != staffs.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(staffs);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!StaffsExists(staffs.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                _cashProvider.SetItem(null, modelName);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(staffs);
+        }
+
+        // GET: Staffs/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || _context.Staffs == null)
+            {
+                return NotFound();
+            }
+
+            var staffs = await _context.Staffs
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (staffs == null)
+            {
+                return NotFound();
+            }
+
+            return View(staffs);
+        }
+
+        // POST: Staffs/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (_context.Staffs == null)
+            {
+                return Problem("Entity set 'CinemaContext.Staffs'  is null.");
+            }
+            var staffs = await _context.Staffs.FindAsync(id);
+            if (staffs != null)
+            {
+                _context.Staffs.Remove(staffs);
+            }
+            _cashProvider.SetItem(null, modelName);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool StaffsExists(int id)
+        {
+          return _context.Staffs.Any(e => e.Id == id);
+        }
+
+        private IEnumerable<Staffs> Search(IQueryable<Staffs> staffs, string name, string surname, string middleName, int workExp, string post)
+        {
+            return staffs.Where(s => s.Name.Contains(name) && s.MiddleName.Contains(middleName) &&
+                                s.Surname.Contains(surname) && s.Post.Contains(post) && s.WorkExperience >= workExp);
+        }
+
+        private IEnumerable<Staffs> Sort(IEnumerable<Staffs> staffs, SortViewModel sortViewModel)
+        {
+            Func<Staffs, object> func = null;
+
+            switch(sortViewModel.FieldName)
+            {
+                case "Name":
+                    func = s => s.Name;
+                    break;
+                case "Surname":
+                    func = s => s.Surname;
+                    break;
+                case "MiddleName":
+                    func = s => s.MiddleName;
+                    break;
+                case "WorkExperience":
+                    func = s => s.WorkExperience;
+                    break;
+                case "Post":
+                    func = s => s.Post;
+                    break;
+                default:
+                    func = s => s.Id;
+                    break;
+            }
+
+            switch (sortViewModel.CurrentState)
+            {
+                case SortState.Ascending:
+                    staffs = staffs.OrderBy(func);
+                    break;
+                case SortState.Descending:
+                    staffs = staffs.OrderByDescending(func);
+                    break;
+            }
+
+            return staffs;
+        }
+    }
+}
